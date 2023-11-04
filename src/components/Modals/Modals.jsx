@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import {useState} from "react"
 import ReactWhatsapp from 'react-whatsapp';
+import { useEffect } from 'react';
 const style = {
   position: 'relative',
   top: '50%',
@@ -31,7 +32,11 @@ const Modals = ({open,handleClose})=> {
         kdTempat: [],
 
     });
-    const onHandleOnSubmit = (e)=> {
+    const [selectedBgIndex,setSelectedBgIndex] = useState([])
+    useEffect(()=> {
+        setValue({...value,kdTempat: [selectedBgIndex]})
+    },[selectedBgIndex])
+    const onHandleOnSubmit = (e,index)=> {
         e.preventDefault();
         const nomorWhatsApp = '6283825702000';
         // const nomorWhatsApp = '6285695036046';
@@ -43,8 +48,16 @@ const Modals = ({open,handleClose})=> {
         // console.log(value)
     }
     const onHandleOnKdtempat = (x)=> {
-        setValue({...value,kdTempat: [...value.kdTempat,x]})
+        setValue({...value,kdTempat: [selectedBgIndex]})
+        if (selectedBgIndex.includes(x)) {
+            setSelectedBgIndex(selectedBgIndex.filter(i => i !== x));
+          } else {
+            setSelectedBgIndex([...selectedBgIndex, x]);
+        }
+        // setValue({...value,kdTempat: [...value.kdTempat,x]})
+        console.log(x)
     }
+    console.log(selectedBgIndex)
     const dataTempat = [
         {kdTempat: ['kd1','kd2','kd3','kd4','kd5']},
         {kdTempat: ['kd6','kd7','kd8','kd9','kd10']},
@@ -105,9 +118,9 @@ const Modals = ({open,handleClose})=> {
                         <tbody>
                             {dataTempat && dataTempat.map((item,index)=> (
                                 <tr key={index}>
-                                    {item && item.kdTempat.map((kd,index)=>(
-                                        <td key={index}>
-                                            <div style={{cursor: "pointer",backgroundColor: "red", padding: "4px"}} onClick={()=>onHandleOnKdtempat(kd,index)}>{kd}</div>
+                                    {item && item.kdTempat.map((kd,indexx)=>(
+                                        <td key={kd}>
+                                            <div style={{cursor: "pointer",backgroundColor: selectedBgIndex.includes(kd) ? "blue" : "red", padding: "4px"}} onClick={()=>onHandleOnKdtempat(kd)}>{kd}</div>
                                         </td>
                                     ))}
                                 </tr>
@@ -115,7 +128,7 @@ const Modals = ({open,handleClose})=> {
                         </tbody> 
                     </table>
                     <label htmlFor="jadwal">Pilih jadwal</label>
-                    <select name="jadwal" id="" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,jadwal: e.target.value})}>
+                    <select name="jadwal" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,jadwal: e.target.value})}>
                         <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option>
                         <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option> 
                         <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option> 
