@@ -1,0 +1,19 @@
+.card-home__container {
+    flex: 1;
+    /* width: 300px;
+    height: 200px; */
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    padding: 20px 30px;
+    border-radius: 10px;
+}
+.card-home__container .card-home__body{
+    display: flex;
+    align-items: center;
+    /* justify-content: space-around; */
+    gap: 30px;
+    color: rgb(253, 52, 52);
+}
+.card-home__flex-number{
+    font-size: 25px;
+}

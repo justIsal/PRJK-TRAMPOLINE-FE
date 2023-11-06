@@ -1,4 +1,6 @@
 import Admin from "./Page/admin";
+import Pesanan from "./Page/admin/pesanan/pesanan";
+import Userkel from "./Page/admin/user/user";
 import User from "./Page/user";
 
 export const route = [
@@ -7,7 +9,15 @@ export const route = [
     element: <User />,
   },
   {
-    path: "/admin",
+    path: "/admin/home",
     element: <Admin />,
   },
+  {
+    path: "/admin/pesanan",
+    element: <Pesanan />
+  },
+  {
+    path: "/admin/user",
+    element: <Userkel />
+  }
 ];

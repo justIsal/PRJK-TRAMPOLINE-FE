@@ -1,0 +1,13 @@
+.pesanan-container__header{
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border-bottom: 3px solid red;
+}
+.table-container__pesanan{
+    padding: 10px;
+    background-color: #fff;
+    border-left: 3px solid red;
+    border-radius: 4px;
+}

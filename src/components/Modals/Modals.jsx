@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import {useState} from "react"
 import ReactWhatsapp from 'react-whatsapp';
 import { useEffect } from 'react';
+import './Modals.css'
 const style = {
   position: 'relative',
   top: '50%',
@@ -15,7 +16,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   height: '87vh',
-  bgcolor: 'background.paper',
+  bgcolor: '#fff',
   boxShadow: 24,
   p: 2,
   borderRadius: '8px',
@@ -25,10 +26,9 @@ const style = {
 const Modals = ({open,handleClose})=> {
     const [value,setValue] = useState({
         nama: "",
-        email: "",
         noWa: "",
-        alamat: "",
         tanggal: new Date(),
+        tanggalLahir: "",
         kdTempat: [],
 
     });
@@ -77,7 +77,7 @@ const Modals = ({open,handleClose})=> {
         >
             <Box sx={style}>
                 <CloseOutlinedIcon sx={{position: "absolute",top: '0',right: "0px",fontSize: "30px"}} onClick={handleClose}/>
-                <h1>inputan</h1>
+                <h1>Isi data</h1>
                 <form onSubmit={onHandleOnSubmit}  >
                     <FormControl sx={{width: "100%"}} >
                         <TextField
@@ -87,14 +87,7 @@ const Modals = ({open,handleClose})=> {
                             value={value.nama}
                             onChange={(e)=>setValue({...value,nama: e.target.value})}
                         />
-                        <TextField
-                            id="email"
-                            label="email"
-                            type="email"
-                            sx={{marginTop: "10px"}}
-                            value={value.email}
-                            onChange={(e)=>setValue({...value,email: e.target.value})}
-                        />
+
                         <TextField
                             id="noWa"
                             label="No hp"
@@ -103,14 +96,7 @@ const Modals = ({open,handleClose})=> {
                             value={value.noWa}
                             onChange={(e)=>setValue({...value,noWa: e.target.value})}
                         />
-                        <TextField
-                            id="alamat"
-                            label="alamat"
-                            type="text"
-                            sx={{marginTop: "10px"}}
-                            value={value.alamat}
-                            onChange={(e)=>setValue({...value,alamat: e.target.value})}
-                        />
+ 
                     </FormControl>
                     <table style={{margin: "20px 0"}}>
                         {/* 8 baris 5 kolom */}
@@ -119,7 +105,7 @@ const Modals = ({open,handleClose})=> {
                                 <tr key={index}>
                                     {item && item.kdTempat.map((kd,indexx)=>(
                                         <td key={kd}>
-                                            <div style={{cursor: "pointer",backgroundColor: selectedBgIndex.includes(kd) ? "blue" : "red", padding: "4px"}} onClick={()=>onHandleOnKdtempat(kd)}>{kd}</div>
+                                            <div className="kdButton" style={{cursor: "pointer",backgroundColor: selectedBgIndex.includes(kd) ? "red" : "#ff5e00b0", padding: "4px"}} onClick={()=>onHandleOnKdtempat(kd)}>{kd}</div>
                                         </td>
                                     ))}
                                 </tr>
@@ -128,11 +114,11 @@ const Modals = ({open,handleClose})=> {
                     </table>
                     <label htmlFor="jadwal">Pilih jadwal</label>
                     <select name="jadwal" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,jadwal: e.target.value})}>
-                        <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option>
-                        <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option> 
-                        <option value="jam 08.00, hari : selasa">jam 08.00, hari : selasa</option> 
+                        <option value="jam 08.00, hari : selasa">jam 10.00, hari : selasa</option>
+                        <option value="jam 08.00, hari : selasa">jam 01.00, hari : selasa</option> 
+                        <option value="jam 08.00, hari : selasa">jam 16.00, hari : selasa</option> 
                     </select>
-                    <button type="submit" style={{width: "100%"}}>submit</button>
+                    <button className="submitButton" type="submit">submit</button>
                 </form>
             </Box>
         </Modal>

@@ -1,0 +1,23 @@
+.navContainer{
+    padding-left: 288px;
+    width: 100%;
+}
+.navContent{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.navContent-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: #fff;
+    padding: 0 20px;
+    /* width: 100%; */
+}
+.main-content {
+    padding: 20px;
+    background-color: #EEEFF4;
+    height: 200vh;
+}

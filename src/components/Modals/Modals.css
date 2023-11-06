@@ -1,0 +1,26 @@
+.kdButton {
+    border-radius: 4px;
+    width: 68px;
+    /* height: 35px; */
+    color: #fff;
+    /* font-size: 1rem; */
+    text-align: center;
+    border: 1px solid black;
+    font-weight: bold;
+}
+.kdButton:hover{
+    background-color: #232323;
+}
+.submitButton{
+    width: 100%;
+    height: 35px;
+    border: 2px solid #ff8383;
+    color: #fff;
+    background: #ff1e1e;
+    cursor: pointer;
+    transition: .5s;
+}
+.submitButton:hover {
+    background: none;
+    color: #ff1e1e;
+}
