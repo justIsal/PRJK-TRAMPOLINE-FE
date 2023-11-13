@@ -9,6 +9,8 @@ import {useState} from "react"
 import ReactWhatsapp from 'react-whatsapp';
 import { useEffect } from 'react';
 import './Modals.css'
+
+import axios from 'axios';
 const style = {
   position: 'relative',
   top: '50%',
@@ -27,24 +29,54 @@ const Modals = ({open,handleClose})=> {
     const [value,setValue] = useState({
         nama: "",
         noWa: "",
-        tanggal: new Date(),
+        tanggalBooking: "",
         tanggalLahir: "",
         kdTempat: [],
+        waktuBooking:''
 
     });
     const [selectedBgIndex,setSelectedBgIndex] = useState([])
     useEffect(()=> {
         setValue({...value,kdTempat: [selectedBgIndex]})
     },[selectedBgIndex])
-    const onHandleOnSubmit = ()=> {
-        const nomorWhatsApp = '6283825702000';
+    const onHandleOnSubmit = async(e)=> {
+        e.preventDefault()
         // const nomorWhatsApp = '6285695036046';
-        const kodeTempat = value.kdTempat.map((item)=> {
-            return item
-        })
-        const pesan = `hallo selamat siang admin saya ${value.nama} dengan email ${value.email} alamat ${value.alamat} nomer wa ${value.noWa} izin konfirmasi dengan kode pemesanan ${kodeTempat} jadwal: ${value.jadwal}`;
-        window.open(`https://api.whatsapp.com/send?phone=${nomorWhatsApp}&text=${encodeURIComponent(pesan)}`, '_blank');
-        // console.log(value)
+        try{
+            const nomorWhatsApp = '6283825702000';
+            const kodeTempat = value.kdTempat.map((item)=> {
+                return item
+            })
+            const waktuBooking = value.tanggalBooking+'T'+value.waktuBooking;
+            const formData = {
+                "name": value.nama,
+                "noWa": value.noWa,
+                "kdTempat": value.kdTempat[0],
+                "waktuBooking": waktuBooking,
+                "tanggalLahir": value.tanggalLahir
+            }
+            // console.log(formData);
+            const response = await axios.post('http://localhost:5174/tiket',formData);
+            console.log(response);
+            if( response.status==201 ){
+                const pesan = `hallo selamat siang admin saya ${value.nama} dengan tanggal lahir ${value.tanggalLahir} nomer wa ${value.noWa} izin konfirmasi dengan kode pemesanan ${kodeTempat} tanggal: ${value.tanggalBooking} jam: ${value.waktuBooking}`;
+                window.open(`https://api.whatsapp.com/send?phone=${nomorWhatsApp}&text=${encodeURIComponent(pesan)}`, '_blank');
+                setValue({
+                    nama: "",
+                    noWa: "",
+                    tanggalBooking: "",
+                    tanggalLahir: "",
+                    kdTempat: [],
+                    waktuBooking:''
+            
+                })
+                setSelectedBgIndex([])
+                handleClose(true)
+            }
+        }catch(err){
+            console.log(err)
+        }
+        console.log(value)
     }
     const onHandleOnKdtempat = (x)=> {
         setValue({...value,kdTempat: [selectedBgIndex]})
@@ -55,6 +87,7 @@ const Modals = ({open,handleClose})=> {
         }
         // setValue({...value,kdTempat: [...value.kdTempat,x]})
         console.log(x)
+        console.log(value)
     }
     console.log(selectedBgIndex)
     const dataTempat = [
@@ -87,7 +120,6 @@ const Modals = ({open,handleClose})=> {
                             value={value.nama}
                             onChange={(e)=>setValue({...value,nama: e.target.value})}
                         />
-
                         <TextField
                             id="noWa"
                             label="No hp"
@@ -95,6 +127,17 @@ const Modals = ({open,handleClose})=> {
                             sx={{marginTop: "10px"}}
                             value={value.noWa}
                             onChange={(e)=>setValue({...value,noWa: e.target.value})}
+                        />
+                        <TextField
+                            id="tanggalLahir"
+                            label="Tanggal lahir"
+                            type="date"
+                            InputLabelProps={{
+                                shrink: true,
+                              }}
+                            sx={{marginTop: "10px"}}
+                            value={value.tanggalLahir}
+                            onChange={(e)=>setValue({...value,tanggalLahir: e.target.value})}
                         />
  
                     </FormControl>
@@ -112,12 +155,25 @@ const Modals = ({open,handleClose})=> {
                             ))}
                         </tbody> 
                     </table>
+                    <FormControl sx={{width: "100%"}} >
+                        <TextField
+                            id="date"
+                            type="date"
+                            label="waktu tiket"
+                            value={value.tanggalBooking}
+                            InputLabelProps={{
+                                shrink: true,
+                              }}
+                            onChange={(e)=>setValue({...value,tanggalBooking: e.target.value})}
+                        />
+                    </FormControl>
                     <label htmlFor="jadwal">Pilih jadwal</label>
-                    <select name="jadwal" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,jadwal: e.target.value})}>
-                        <option value="jam 08.00, hari : selasa">jam 10.00, hari : selasa</option>
-                        <option value="jam 08.00, hari : selasa">jam 01.00, hari : selasa</option> 
-                        <option value="jam 08.00, hari : selasa">jam 16.00, hari : selasa</option> 
+                    <select name="jadwal" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,waktuBooking: e.target.value})}>
+                        <option value="10:00:00">jam 10.00</option>
+                        <option value="01:00:00">jam 01.00</option> 
+                        <option value="16:00:00">jam 16.00</option> 
                     </select>
+                    
                     <button className="submitButton" type="submit">submit</button>
                 </form>
             </Box>

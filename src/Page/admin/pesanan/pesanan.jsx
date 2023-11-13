@@ -7,6 +7,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import "./pesanan.css"
+import { useEffect } from "react";
+import axiosJwt from "../../../api/interceptors";
+import { useState } from "react";
+import format from 'date-fns/format';
+import idLocale from 'date-fns/locale/id';
 function createData(
     name: string,
     calories: number,
@@ -17,7 +22,7 @@ function createData(
     return { name, calories, fat, carbs, protein };
 }
 const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Frozen yoghurt', 159, 6.0, 24,4,3,3),
     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
     createData('Eclair', 262, 16.0, 24, 6.0),
     createData('Cupcake', 305, 3.7, 67, 4.3),
@@ -25,6 +30,41 @@ const rows = [
   ];
   
 const Pesanan = () => {
+    const [data,setDatas] = useState('')
+    const reqDataApi = async()=> {
+        try{
+            const req = await axiosJwt.get('/tiket');
+            const data = req.data.filter((item)=>item.isVerified!==true)
+            setDatas(data)
+            console.log(req)
+        }catch(err){
+            console.log(err)
+        }
+    }
+    useEffect(()=> {
+        reqDataApi()
+    },[])
+    const handleUpdateIsverified = async(id,item)=> {
+        // e.preventDefault();
+        if(window.confirm('Validasi?')){
+            const dateNow = new Date();
+            const waktuPesan = format(dateNow,'yyyy-dd-MM')
+            const newDate = {...item,isVerified: true,waktuPesan: waktuPesan}
+            try{
+                const req = await axiosJwt.put(`/tiket/${id}`,newDate)
+                console.log(req)
+                console.log(newDate)
+            }catch(err){
+                console.log(err)
+            }
+        }
+    }
+    function parseISODateTime(dateTimeString) {
+        const dateObject = new Date(dateTimeString);
+        const tanggal = dateObject.toISOString().split('T')[0];
+        const waktu = dateObject.toLocaleTimeString();
+        return { tanggal, waktu };
+      }
     return (
     <Appshell>
         <div className="pesanan-container__header">
@@ -35,28 +75,49 @@ const Pesanan = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Dessert (100g serving)</TableCell>
-                            <TableCell align="right">Calories</TableCell>
-                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                            <TableCell>No</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>No whatsapp</TableCell>
+                            <TableCell>Tanggal lahir</TableCell>
+                            <TableCell>Kode Tempat</TableCell>
+                            <TableCell>tanggal booking</TableCell>
+                            <TableCell>Waktu booking</TableCell>
+                            <TableCell>Validasi</TableCell>
+                            <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="right">{row.calories}</TableCell>
-                            <TableCell align="right">{row.fat}</TableCell>
-                            <TableCell align="right">{row.carbs}</TableCell>
-                            <TableCell align="right">{row.protein}</TableCell>
+                        {data.length ? data.map((row,index) => (
+                            <TableRow>
+                                <TableCell>{index+1}</TableCell>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.noWa}</TableCell>
+                                <TableCell>{row.tanggalLahir}</TableCell>
+                                <TableCell>
+                                    {
+                                        row.kdTempat && row.kdTempat.map((item)=>{
+                                            return item+' '
+                                        })
+                                    }
+                                </TableCell>
+                                <TableCell>
+                                    {parseISODateTime(row.waktuBooking).tanggal}
+                                </TableCell>
+                                <TableCell>
+                                    {parseISODateTime(row.waktuBooking).waktu}
+                                </TableCell>
+                                <TableCell>{!row.isVerified ? 'belum': 'sudah'}</TableCell>
+                                <TableCell>
+                                    <button 
+                                        onClick={()=>{   
+                                            handleUpdateIsverified(row._id,{...row,isVerified: true});
+                                            reqDataApi();
+                                        }}
+                                    >validasi</button>
+                                </TableCell>
                             </TableRow>
-                        ))}
+                        )):(<>tidak ada</>)
+                    }
                     </TableBody>
                 </Table>
             </TableContainer>

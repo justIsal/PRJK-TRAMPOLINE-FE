@@ -1,65 +1,111 @@
+import React, { useEffect, useState } from "react";
 import Appshell from "../../../components/Appshell/appshell";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import "./user.css"
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
+import MUIDataTable from "mui-datatables";
+import ReactDOM from "react-dom";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+import axiosJwt from "../../../api/interceptors";
+import { createTheme, ThemeProvider} from '@mui/material/styles';
+const muiCache = createCache({
+  key: "mui-datatables",
+  prepend: true
+});
+const customTheme = createTheme({
+  shadows: ["none"], // Mengganti box-shadow menjadi none
+});
 const Userkel = () => {
+
+  const [data,setDatas] = useState([]);
+
+  const columns = [
+    {
+      name: "name",
+      label: "Name",
+      options: {
+        filterOptions: { fullWidth: true }
+      }
+    },
+    {
+      name: "noWa",
+      label: "No whatsapp",
+      options: {
+        filterOptions: { fullWidth: true }
+      }
+    },
+    {
+      name: "waktuPesan",
+      label: "Waktu pesan",
+      options: {
+        filterOptions: { fullWidth: true }
+      }
+    },
+    {
+      name: "kdTempat",
+      label: "Kode tempat",
+      options: {
+        filterOptions: { fullWidth: true },
+        customBodyRender: (value) => {
+          return value.map((item)=>item+' ')
+        }
+      }
+    },
+    {
+      name: "isVerified",
+      label: "Status ",
+      options: {
+        filterOptions: { fullWidth: true },
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <button>{value ? "Lunas" : "Belum"}</button>;
+        }
+      }
+    }
+  ];
+  useEffect(()=> {
+    const getDataApi = async() => {
+      try{
+        const req = await axiosJwt.get('/tiket');
+        console.log(req.data)
+        setDatas(req.data || [])
+      }catch(err){
+        console.log(err)
+        setDatas([])
+      }
+    }
+    getDataApi()
+  },[])
+  const options = {
+    downloadOptions: {
+      filename: "coba.csv",
+      filterOptions: {
+        useDisplayedColumnsOnly: true,
+        useDisplayedRowsOnly: true
+      }
+    },
+
+    filterType: "dropdown",
+    onTableChange: (action, state) => {
+      console.log(action);
+      console.dir(state);
+    }
+  };
+  const ge = []
   return (
   <Appshell>
       <div className="user-container__header">
             user
       </div>
       <div className="table-container__pesanan">
-        <TableContainer component={Paper} sx={{boxShadow: 'none'}}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Dessert (100g serving)</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell component="th" scope="row">
-                            {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                        <TableCell align="right">{row.carbs}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+      <CacheProvider value={muiCache}>
+        <ThemeProvider theme={customTheme}>
+          <MUIDataTable
+            title={"dfdfdf"}
+            data={data}
+            columns={columns}
+            options={options}
+          />
+        </ThemeProvider>
+      </CacheProvider>
       </div>
   </Appshell>
   )

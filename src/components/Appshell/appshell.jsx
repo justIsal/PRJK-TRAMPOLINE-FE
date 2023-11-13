@@ -3,7 +3,11 @@ import NavAdmin from "../NavAdmin/NavAdmin"
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
+import { useSelector } from "react-redux";
+import { useEffect,useState } from "react";
 import "./appShell.css"
+import axiosJwt from "../../api/interceptors";
+// import { jwtDecode } from "jwt-decode";
 const Appshell = ({children})=> {
     const dataNav = [
         {
@@ -23,6 +27,30 @@ const Appshell = ({children})=> {
         },
 
     ]
+
+    // const id = useSelector(state => state.token.id);
+    const user = JSON.parse(localStorage.getItem('user'))
+    const accessToken = useSelector(state => state.token.accessToken);
+    // const id = useSelector(state =>state.token.id)
+    const userId = user.userId
+    // console.log(id)
+    const [value,setValues]=useState('')
+    useEffect(()=> {
+        const requestApi2 = async()=>{
+            try {
+                const res = await axiosJwt.get(`/admin/${userId}`,{
+                    headers: { 
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                setValues(res.data);
+                
+              } catch (error) {
+                console.error('Error making API request:', error);
+              }
+        }
+        requestApi2()
+    },[])
     return(
         <div className="appshellContainer">
             <div className="sidebar">
@@ -37,7 +65,7 @@ const Appshell = ({children})=> {
                     ))}
                 </div>
             </div>
-            <NavAdmin>
+            <NavAdmin name={user ? user.userName : ""}>
                 {children}
             </NavAdmin>
         </div>
