@@ -10,7 +10,8 @@ import ReactWhatsapp from 'react-whatsapp';
 import { useEffect } from 'react';
 import './Modals.css'
 
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import axiosJwt from '../../api/interceptors';
 const style = {
   position: 'relative',
   top: '50%',
@@ -25,49 +26,48 @@ const style = {
   overflowY: "auto"
 };
 
-const Modals = ({open,handleClose})=> {
+const ModalEdit = ({open,handleClose,data})=> {
     const [value,setValue] = useState({
         name: "",
         noWa: "",
         tanggalBooking: "",
         tanggalLahir: "",
         kdTempat: [],
-        sesiBooking:"10:00:00"
+        sesiBooking: ""
 
     });
-    const [selectedBgIndex,setSelectedBgIndex] = useState([])
+    console.log(data.kdTempat)
+    const navigate = useNavigate()
+    const [selectedBgIndex,setSelectedBgIndex] = useState('')
     useEffect(()=> {
+      if(data && data.kdTempat) {
         setValue({...value,kdTempat: [selectedBgIndex]})
+        console.log(selectedBgIndex)
+      }
     },[selectedBgIndex])
-    const onHandleOnSubmit = async(e)=> {
-        e.preventDefault()
-        // const nomorWhatsApp = '6285695036046';
-        try{
-            const nomorWhatsApp = '6283825702000';
-            const kodeTempat = value.kdTempat.map((item)=> {
-                return item
-            })
-            // const waktuBooking = value.tanggalBooking+'T'+value.waktuBooking;
-            const formData = {...value,kdTempat: value.kdTempat[0]};
-            const response = await axios.post('http://localhost:5174/tiket',formData);
-
-            if( response.status==201 ){
-                const pesan = `hallo selamat siang admin saya ${value.nama} dengan tanggal lahir ${value.tanggalLahir} nomer wa ${value.noWa} izin konfirmasi dengan kode pemesanan ${kodeTempat} tanggal: ${value.tanggalBooking} jam: ${value.sesiBooking}`;
-                window.open(`https://api.whatsapp.com/send?phone=${nomorWhatsApp}&text=${encodeURIComponent(pesan)}`, '_blank');
-                setValue({
-                    nama: "",
-                    noWa: "",
-                    tanggalBooking: "",
-                    tanggalLahir: "",
-                    kdTempat: [],
-                    waktuBooking:''
-            
-                })
-                setSelectedBgIndex([])
-                handleClose(true)
-            }
-        }catch(err){
-            console.log(err)
+    useEffect(()=> {
+      setValue({
+        name: data.name,
+        noWa: data.noWa,
+        tanggalBooking: data.tanggalBooking,
+        tanggalLahir: data.tanggalLahir,
+        kdTempat: data.kdTempat,
+        sesiBooking: data.sesiBooking
+      })
+      if(data && data.kdTempat) setSelectedBgIndex(data.kdTempat)
+    },[data])
+    const onHandleOnSubmit = async()=> {
+        if(window.confirm("Are you sure you want to update?")){
+          try{
+              const formData = {...value,kdTempat: value.kdTempat[0]};
+              const req = await axiosJwt.put(`/tiket/${data._id}`,formData)
+              console.log(formData)
+              console.log(req)
+              if(req.status == 200) window.location.reload()
+              handleClose(true)
+          }catch(err){
+              console.log(err)
+          }
         }
     }
     const onHandleOnKdtempat = (x)=> {
@@ -156,7 +156,7 @@ const Modals = ({open,handleClose})=> {
                         />
                     </FormControl>
                     <label htmlFor="jadwal">Pilih jawal sesi</label>
-                    <select name="jadwal" style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,sesiBooking: e.target.value})}>
+                    <select name="jadwal" value={value.sesiBooking} style={{width: "100%", marginBottom: "20px",padding: "10px"}} onChange={(e)=>setValue({...value,sesiBooking: e.target.value})}>
                         <option value="10:00:00">jam 10.00</option>
                         <option value="01:00:00">jam 01.00</option> 
                         <option value="16:00:00">jam 16.00</option> 
@@ -169,4 +169,4 @@ const Modals = ({open,handleClose})=> {
         </div>
     );
 }
-export default Modals
+export default ModalEdit

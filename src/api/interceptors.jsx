@@ -46,11 +46,10 @@ axiosJwt.interceptors.response.use(
           // originalRequest._retry = true;
           try {
             const req = await refreshToken();
-            console.log(req)
             originalRequest.headers.Authorization = `Bearer ${req.accessToken}`;
             store.dispatch(setAccessToken(req.accessToken))
             store.dispatch(setId(jwtDecode(req.accessToken).userId))
-            console.log(jwtDecode(req.accessToken).userId)
+
             return axiosJwt(originalRequest);
           } catch (refreshError) {
             console.error('Error refreshing access token:', refreshError);

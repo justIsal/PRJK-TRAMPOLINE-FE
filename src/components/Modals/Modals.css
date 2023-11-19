@@ -24,3 +24,6 @@
     background: none;
     color: #ff1e1e;
 }
+.csvDownload-container{
+    display:flex
+}

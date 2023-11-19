@@ -1,14 +1,113 @@
-
+.card-home__left-desc{
+   margin: 10px 0;
+   font-weight: normal;
+   color: #686868;
+}
 .card-home{
     display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    /* flex: 1 1 1 50%; */
+}
+.card-home__left{
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 70%;
+}
+.card-home__center{
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 70%;
+}
+.card-home__right{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.export__container{
+    width: 100%;
+    /* height: 100px; */
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    padding: 20px 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.export__flex{
+    display: flex;
     gap: 20px;
-    flex: 1 1 1 50%;
+    align-items: center;
 }
 .line-cart__container{
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #fff;
     width: 100%;
-    height: 70vh;
+    height: 68vh;
     box-shadow: 2px 2px 10px 1px #c9c9c975;
     border-radius: 10px;
+    padding: 10px;
+}
+.btn-export button{
+    border: 1px solid rgb(147, 147, 147);
+    padding: 0.6rem 1.5rem;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: .5s;
+    opacity: 0.8;
+}
+.btn-export button:hover{
+    background: red;
+    color: #fff;
+}
+.select-export {
+    padding: 0.5rem 1.5rem;
+    background: none;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background-color: #fc1b1b;
+    opacity: 0.8;
+    color: #fff;
+}
+.select-export option{
+    border-radius: 0px;
+    background: white;
+    color: #000;
+}
+.select-export option:hover{
+    background: red;
+}
+.btn-createReport{
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: .3s;
+    padding: 0.5rem 0.5rem;
+    font-weight: bold;
+}
+.btn-createReport:hover{
+    background-color: rgb(224, 224, 224);
+}
+.yellowgreen{
+    background: yellowgreen;
+    color: #fff;
+    opacity: 0.8;
+}
+.red{
+    background: red;
+    color: #fff;
+    opacity: 0.8;
 }

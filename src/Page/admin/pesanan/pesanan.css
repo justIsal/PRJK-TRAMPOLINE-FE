@@ -11,3 +11,29 @@
     border-left: 3px solid red;
     border-radius: 4px;
 }
+.cellAction{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.btn-validasi,
+.btn-update{
+    border: none;
+    background: #77C454;
+    border-radius: 3px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.8;
+    transition: .3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-update{
+    background-color: #FF788E;
+}
+.btn-validasi:hover,
+.btn-update:hover{
+    opacity: 1;
+}

@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import "./card.css"
-const CardHome = ({icon,text,number})=> {
+
+const CardHome = ({icon,text,number,background,to})=> {
     return(
-        <div className="card-home__container">
+        <Link to={to} className={`card-home__container ${background}`}>
             <div className="card-home__body">
                 {icon}
                 <div className="card-home__flex">
@@ -9,7 +11,7 @@ const CardHome = ({icon,text,number})=> {
                     <p className="card-home__flex-text">{text}</p>
                 </div>
             </div>
-      </div>
+        </Link>
     )
 }
 export default CardHome;

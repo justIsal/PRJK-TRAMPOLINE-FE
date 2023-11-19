@@ -49,7 +49,6 @@ export default function ProductsDemo() {
         const getDataApi = async()=> {
             try{
                 const response = await axiosJwt.get('http://localhost:5174/tiket');
-                // console.log(response.data);
                 setProducts(response.data)
             }catch(err){
                 console.log(err)
@@ -251,7 +250,6 @@ export default function ProductsDemo() {
             <span className="p-input-icon-left">
                 <i className="pi pi-search" />
                 <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
-                {console.log(globalFilter)}
             </span>
         </div>
     );
@@ -292,7 +290,6 @@ export default function ProductsDemo() {
                         dataKey="id"  paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" globalFilter={globalFilter} header={header}>
-                    {console.log(globalFilter)}
                     <Column selectionMode="multiple" exportable={false}></Column>
                     <Column 
                         field="No" 
