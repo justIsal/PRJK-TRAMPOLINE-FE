@@ -1,17 +1,9 @@
 import Appshell from "../../../components/Appshell/appshell";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import "./pesanan.css"
-import { useEffect } from "react";
+import "./userAdmin.css"
+import { useEffect,useState  } from "react";
 import axiosJwt from "../../../api/interceptors";
-import { useState } from "react";
 import format from 'date-fns/format';
-import idLocale from 'date-fns/locale/id';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import ModalEdit from "../../../components/Modals/ModalEdit";
@@ -19,7 +11,6 @@ import MUIDataTable from "mui-datatables";
 import { createTheme, ThemeProvider} from '@mui/material/styles';
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import Swal from 'sweetalert2'
 const muiCache = createCache({
     key: "mui-datatables",
     prepend: true
@@ -33,18 +24,18 @@ const muiCache = createCache({
       'none',
     ], 
   });
-
-const Pesanan = () => {
+  
+const UserAdmin = () => {
     const [data,setDatas] = useState([])
+    // const [data,setDatas] = useState([])
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [selectedData, setSelectedData] = useState(null); 
     const reqDataApi = async()=> {
         try{
-            const req = await axiosJwt.get('/tiket');
-            const data = req.data.filter((item)=>item.isVerified!==true)
-            setDatas(data || [])
+            const req = await axiosJwt.get('/admin');
+            setDatas(req.data || [])
         }catch(err){
             console.log(err)
             setDatas([])
@@ -53,36 +44,18 @@ const Pesanan = () => {
     useEffect(()=> {
         reqDataApi()
     },[])
-    const handleUpdateIsverified = (id,item)=> {
-        const confirmResult = Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, verifikasi!"
-        });
-        confirmResult.then(result => {
-          if(result.isConfirmed){
-              const dateNow = new Date();
-              const waktuPesan = format(dateNow,'yyyy-MM-dd')
-              const newDate = {...item,isVerified: true,waktuPesan: waktuPesan}
-              axiosJwt
-                .put(`/tiket/${id}`,newDate)
-                .then((res) => {
-                  if (res.status === 200) {
-                    window.location.reload();
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-          }else{
-            return false
-          }
-        })
-        return false
+    const handleUpdateIsverified = async(id,item)=> {
+        // e.preventDefault();
+        if(window.confirm('Validasi?')){
+            const dateNow = new Date();
+            const waktuPesan = format(dateNow,'yyyy-MM-dd')
+            const newDate = {...item,isVerified: true,waktuPesan: waktuPesan}
+            try{
+                const req = await axiosJwt.put(`/tiket/${id}`,newDate)
+            }catch(err){
+                console.log(err)
+            }
+        }
     }
     function parseISODateTime(dateTimeString) {
         const dateObject = new Date(dateTimeString);
@@ -99,41 +72,17 @@ const Pesanan = () => {
           }
         },
         {
-          name: "noWa",
-          label: "No whatsapp",
+          name: "email",
+          label: "email",
           options: {
             filterOptions: { fullWidth: true }
           }
         },
         {
-          name: "tanggalLahir",
-          label: "Tanggal Lahir",
+          name: "password",
+          label: "password",
           options: {
             filterOptions: { fullWidth: true }
-          }
-        },
-        {
-          name: "kdTempat",
-          label: "Kode tempat",
-          options: {
-            filterOptions: { fullWidth: true },
-            customBodyRender: (value) => {
-              return value.map((item)=>item+' ')
-            }
-          }
-        },
-        {
-          name: "tanggalBooking",
-          label: "tanggal Booking",
-          options: {
-            filterOptions: { fullWidth: true }
-          }
-        },
-        {
-          name: "sesiBooking",
-          label: "Sesi Booking",
-          options: {
-            filterOptions: { fullWidth: true },
           }
         },
         {
@@ -162,14 +111,6 @@ const Pesanan = () => {
                             handleClose={handleClose}
                             data={selectedData || []}
                         />
-                        <button 
-                            className="btn-validasi"
-                            onClick={()=>{   
-                                // console.log(value)
-                                handleUpdateIsverified(data[tableMeta.rowIndex]._id,{...data[tableMeta.rowIndex],isVerified: true});
-                                reqDataApi();
-                            }}
-                        > <DoneOutlinedIcon />validasi</button>
                     </div>
                 )
             }
@@ -179,38 +120,24 @@ const Pesanan = () => {
       const formattedDate = (inputDate)=>{
         return format(new Date(inputDate), 'dd,MMMM yyyy', { awareOfUnicodeTokens: true });
       }
-      const handleDataDelete = (rowsDeleted,newTableData) => {
-        const confirmResultPromise = Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete!"
-        });
-        confirmResultPromise.then((result) => {
-          if (result.isConfirmed) {
-              const getData = rowsDeleted.data.map((row) => data[row.dataIndex]);
-              axiosJwt
-                .delete('/tiket', {
-                  data: getData
-                })
-                .then((res) => {
-                  if (res.status === 200) {
-                    window.location.reload();
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }else {
-              rowsDeleted.lookup[0] = false;
-              return false;
+      const handleDataDelete = async(rowsDeleted,newTableData) => {
+        const confirm = window.confirm('Are you sure you want to delete?')
+        if(confirm){
+          // console.log(rowsDeleted)
+          const getData = rowsDeleted.data.map(row=>data[row.dataIndex])
+          console.log(getData)
+          try{
+            const res = await axiosJwt.delete('/admin',{
+              data: getData
+            });
+            if(res.status==200){
+              window.location.reload()
             }
-        });
-      
-        return false;
+          }catch(err){
+            console.log(err)
+          }
+        }
+    
       }
       const options = {
         downloadOptions: {
@@ -222,25 +149,20 @@ const Pesanan = () => {
         },
     
         filterType: "dropdown",
-        // onTableChange: (action, state) => {
-        //   console.dir(state);
-        // }
         onRowsDelete: handleDataDelete,
-
         print: false,
-        download: false,
-        
+        download: false
       };
     return (
     <Appshell data={data.length}>
         <div className="pesanan-container__header">
-            <h3 className="head-title">Dashboard</h3>
+            <h3 className="head-title">Admin</h3>
         </div>
         <div className="table-container__pesanan">
             <CacheProvider value={muiCache}>
                 <ThemeProvider theme={customTheme}>
                 <MUIDataTable
-                    title={"Tiket validate"}
+                    title={"Admin manage"}
                     data={data}
                     columns={columns}
                     options={options}
@@ -251,4 +173,4 @@ const Pesanan = () => {
     </Appshell>
     )
 };
-export default Pesanan;
+export default UserAdmin;

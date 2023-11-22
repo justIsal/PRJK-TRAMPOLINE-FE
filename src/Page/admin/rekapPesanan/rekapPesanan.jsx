@@ -8,6 +8,7 @@ import createCache from "@emotion/cache";
 import ReactDOM from "react-dom";
 import axiosJwt from "../../../api/interceptors";
 import format from 'date-fns/format';
+import Swal from 'sweetalert2'
 const muiCache = createCache({
   key: "mui-datatables",
   prepend: true
@@ -89,28 +90,42 @@ const RekapPesanan = () => {
     }
     getDataApi()
   },[])
-  const handleDataDelete = async(rowsDeleted,newTableData) => {
-    const confirm = window.confirm('Are you sure you want to delete?')
-    if(confirm){
-      // console.log(rowsDeleted)
-      const getData = rowsDeleted.data.map(row=>data[row.dataIndex])
-      console.log(getData)
-      try{
-        const res = await axiosJwt.delete('http://localhost:5174/tiket',{
-          data: getData
-        });
-        if(res.status==200){
-          window.location.reload()
-        }
-      }catch(err){
-        console.log(err)
+  const handleDataDelete = (rowsDeleted,newTableData) => {
+    const confirmResultPromise = Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete!"
+    });
+    confirmResultPromise.then((result) => {
+      if (result.isConfirmed) {
+          const getData = rowsDeleted.data.map((row) => data[row.dataIndex]);
+          axiosJwt
+            .delete('/tiket', {
+              data: getData
+            })
+            .then((res) => {
+              if (res.status === 200) {
+                window.location.reload();
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }else {
+          // rowsDeleted.lookup[0] = false;
+          return false;
       }
-    }
-
+    });
+    return false;
   }
   const options = {
     downloadOptions: {
       filename: "coba.csv",
+      separator: ";",
       filterOptions: {
         useDisplayedColumnsOnly: true,
         useDisplayedRowsOnly: true

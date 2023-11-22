@@ -38,6 +38,7 @@
     "react-table": "^7.8.0",
     "react-whatsapp": "^0.3.0",
     "redux-persist": "^6.0.0",
+    "sweetalert2": "^11.10.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

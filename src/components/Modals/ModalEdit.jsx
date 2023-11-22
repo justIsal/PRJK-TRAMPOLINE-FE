@@ -9,7 +9,7 @@ import {useState} from "react"
 import ReactWhatsapp from 'react-whatsapp';
 import { useEffect } from 'react';
 import './Modals.css'
-
+import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom';
 import axiosJwt from '../../api/interceptors';
 const style = {
@@ -36,13 +36,11 @@ const ModalEdit = ({open,handleClose,data})=> {
         sesiBooking: ""
 
     });
-    console.log(data.kdTempat)
     const navigate = useNavigate()
     const [selectedBgIndex,setSelectedBgIndex] = useState('')
     useEffect(()=> {
       if(data && data.kdTempat) {
         setValue({...value,kdTempat: [selectedBgIndex]})
-        console.log(selectedBgIndex)
       }
     },[selectedBgIndex])
     useEffect(()=> {
@@ -56,19 +54,37 @@ const ModalEdit = ({open,handleClose,data})=> {
       })
       if(data && data.kdTempat) setSelectedBgIndex(data.kdTempat)
     },[data])
-    const onHandleOnSubmit = async()=> {
-        if(window.confirm("Are you sure you want to update?")){
-          try{
-              const formData = {...value,kdTempat: value.kdTempat[0]};
-              const req = await axiosJwt.put(`/tiket/${data._id}`,formData)
-              console.log(formData)
-              console.log(req)
-              if(req.status == 200) window.location.reload()
-              handleClose(true)
-          }catch(err){
-              console.log(err)
-          }
-        }
+    const onHandleOnSubmit = (e)=> {
+        e.preventDefault()
+        handleClose(true)
+        const confirmResultPromise = Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete!"
+          });
+          confirmResultPromise.then((result) => {
+            if(result.isConfirmed) {
+                const formData = {...value,kdTempat: value.kdTempat[0]};
+                axiosJwt
+                  .put(`/tiket/${data._id}`,formData)
+                  .then((res) => {
+                      if (res.status === 200) {
+                        window.location.reload();
+                      }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+            }else{
+                handleClose(true)
+                return false
+            }
+          })
+          return false
     }
     const onHandleOnKdtempat = (x)=> {
         setValue({...value,kdTempat: [selectedBgIndex]})

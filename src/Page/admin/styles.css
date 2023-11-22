@@ -45,15 +45,7 @@
     gap: 20px;
     align-items: center;
 }
-.line-cart__container{
-    margin-top: 10px;
-    background-color: #fff;
-    width: 100%;
-    height: 68vh;
-    box-shadow: 2px 2px 10px 1px #c9c9c975;
-    border-radius: 10px;
-    padding: 10px;
-}
+
 .btn-export button{
     border: 1px solid rgb(147, 147, 147);
     padding: 0.6rem 1.5rem;
@@ -101,13 +93,41 @@
 .btn-createReport:hover{
     background-color: rgb(224, 224, 224);
 }
-.yellowgreen{
-    background: yellowgreen;
+.blue{
+    background: hsl(227, 81%, 46%,0.8);
     color: #fff;
-    opacity: 0.8;
+}
+.yellow{
+    background: rgb(220, 220, 0,0.8);
+    color: #fff;
+}
+.yellowgreen{
+    background: rgb(154, 205, 50,0.8);
+    color: #fff;
 }
 .red{
-    background: red;
+    background: #FF3333;
     color: #fff;
-    opacity: 0.8;
+}
+.body__container{
+    display: flex;
+    flex: 1 1;
+    gap: 10px;
+    margin-top: 10px;
+}
+.line-cart__container{
+    background-color: #fff;
+    width: 70%;
+    height: 69vh;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    border-radius: 10px;
+    padding: 20px;
+}
+.table-inToday__container{
+    width: 35%;
+    height: 69vh;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px 1px #c9c9c975;
+    border-radius: 10px;
+    padding: 20px;
 }

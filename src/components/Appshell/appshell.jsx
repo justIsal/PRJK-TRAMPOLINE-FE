@@ -3,13 +3,17 @@ import NavAdmin from "../NavAdmin/NavAdmin"
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
 import PermContactCalendarOutlinedIcon from '@mui/icons-material/PermContactCalendarOutlined';
-import { useSelector } from "react-redux";
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect,useState } from "react";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import "./appShell.css"
 import axiosJwt from "../../api/interceptors";
 import axios from "axios";
-
+import { clearData } from "../../redux/authSlice";
+import { store } from "../../redux/store";
+import { jwtDecode } from "jwt-decode";
+import Swal from 'sweetalert2'
 // import { jwtDecode } from "jwt-decode";
 const Appshell = ({children,data})=> {
     const dataNav = [
@@ -32,20 +36,18 @@ const Appshell = ({children,data})=> {
     ]
     
     // const id = useSelector(state => state.token.id);
-    const user = JSON.parse(localStorage.getItem('user'))
-    const accessToken = useSelector(state => state.token.accessToken);
-    // const id = useSelector(state =>state.token.id)
-    const userId = user.userId
+    // const user = JSON.parse(localStorage.getItem('user'))
+    const accessToken = useSelector(state => state.token.token);
+    const user = useSelector(state =>state.token.user)
+
+    // const userId = user.userId
     const navigate = useNavigate()
     const [value,setValues]=useState('')
+    const dispatch = useDispatch()
     useEffect(()=> {
         const requestApi2 = async()=>{
             try {
-                const res = await axiosJwt.get(`/admin/${userId}`,{
-                    headers: { 
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
+                const res = await axiosJwt.get(`/admin/${user.id}`);
                 setValues(res.data);
                 
               } catch (error) {
@@ -55,11 +57,21 @@ const Appshell = ({children,data})=> {
         requestApi2()
     },[])
     const onClickLogout = async() => {
-        if(window.confirm('Are you sure you want to log out')){
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, log out!"
+          });
+        if(confirmResult.isConfirmed){
             try{
                 const req = await axios.delete('http://localhost:5174/logout');
                 console.log(req)
-                if(req.status==200) navigate('/admin')
+                store.dispatch(clearData())
+                if(req.status) navigate('/admin')
                 
             }catch(err){
                 console.log(err)

@@ -3,6 +3,9 @@ import Appshell from "../../components/Appshell/appshell";
 import CardHome from "../../components/Card/cardHome";
 import './styles.css'
 import LocalAtmOutlinedIcon from '@mui/icons-material/LocalAtmOutlined';
+import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
@@ -26,6 +29,7 @@ import { faker } from '@faker-js/faker';
 import ModalDate from "../../components/Modals/ModalDate";
 import { startOfWeek, endOfWeek,startOfMonth, endOfMonth, format } from 'date-fns';
 import CSVDownloadButton from "../../components/Export/CSVDownloadButton";
+import Table from "../../components/table/Table";
 
 
 
@@ -101,6 +105,10 @@ const Admin = () => {
       title: {
         display: true,
         text: `Laporan penjualan tiket tanggal ${format(startDate, 'yyyy-MM-dd')} - ${format(endDate, 'yyyy-MM-dd')}`,
+        font: {
+          weight: 'bold',
+          size: '20px'
+        }
       },
     },
   };
@@ -118,18 +126,14 @@ const Admin = () => {
   useEffect(()=> {
     const requestApi = async()=>{
       try{
-        const req = await axiosJwt.get('/tiket',{
-          headers: { 
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
+        const req = await axiosJwt.get('/tiket');
 
         setValue(req.data)
         const isVerifiedSucces= req.data.filter(item=>item.isVerified == true)
         const isVerifiedPending = req.data.filter(item=>item.isVerified == false)
         setTiketSucces(isVerifiedSucces.length)
-        setTiketPending(isVerifiedPending.length)
-
+        setTiketPending(isVerifiedPending)
+        
         const labels = ['minggu','senin','selasa','rabu','kamis','jumat','sabtu'];
         const bookingsPerDayInWeek = []
 
@@ -179,6 +183,7 @@ const Admin = () => {
         setInToday(bookingsForDay)
 
       }catch(err){
+        navigate('/admin')
         console.log(err)
       }
     }
@@ -195,37 +200,48 @@ const Admin = () => {
     return setExportValue(inToday)
   }
   return (
-    <Appshell data={tiketPending}>
+    <Appshell data={tiketPending.length}>
       <div className="card-home">
-        <div className="card-home__left">
+        {/* <div className="card-home__left">
           <h3 className="card-home__left-desc">
             hari ini : <span>{inToday.length} tiket</span> | <span>Rp.{inToday.length * 35000}</span> 
             
           </h3>
           <h3 className="card-home__left-desc">Minggu ini : <span>{inWeek.length} tiket</span> | <span>Rp.{inWeek.length * 35000}</span> </h3>
           <h3 className="card-home__left-desc">Bulan ini : <span>{inMonth.length} tiket</span> | <span>Rp.{inMonth.length * 35000}</span> </h3>
-        </div>
-        <div className="card-home__center">
-
-        </div>
-        <div className="card-home__right">
+        </div> */}
           <CardHome
             key={0}
             icon={<LocalAtmOutlinedIcon sx={{fontSize: "60px"}}/>} 
+            number={inToday && 'Rp.'+ inToday.length * 35000}
+            text={"In today"}
+            background={"blue"}
+            to="/admin/rekapPesanan"
+            />
+          <CardHome
+            key={1}
+            icon={<LocalAtmOutlinedIcon sx={{fontSize: "60px"}}/>} 
+            number={inWeek && 'Rp.' + inWeek.length * 35000}
+            text={"In week"} 
+            background={"yellow"}
+            to="/admin/pesanan"
+          />
+          <CardHome
+            key={2}
+            icon={<CheckBoxOutlinedIcon sx={{fontSize: "60px"}}/>} 
             number={tiketSucces && tiketSucces}
             text={"Tiket selesai"}
             background={"red"}
             to="/admin/rekapPesanan"
             />
           <CardHome
-            key={1}
-            icon={<LocalAtmOutlinedIcon sx={{fontSize: "60px"}}/>} 
-            number={tiketPending}
+            key={3}
+            icon={<QueueOutlinedIcon sx={{fontSize: "60px"}}/>} 
+            number={tiketPending.length}
             text={"Tiket antrian"} 
             background={"yellowgreen"}
             to="/admin/pesanan"
           />
-        </div>
       </div>
       <div className="export__container">
         <h2>Laporan Penjualan</h2>
@@ -249,12 +265,17 @@ const Admin = () => {
           />
         </div>
       </div>
-      <div className="line-cart__container">
-      {chartData.labels && chartData.labels.length > 0 ? (
-        <Bar options={options} data={chartData} />
-      ) : (
-        <p>Loading or no data available</p>
-      )}
+      <div className="body__container">
+        <div className="line-cart__container">
+        {chartData.labels && chartData.labels.length > 0 ? (
+          <Bar options={options} data={chartData} />
+        ) : (
+          <p>Loading or no data available</p>
+        )}
+        </div>
+        <div className="table-inToday__container">
+          <Table data={tiketPending} />
+        </div>
       </div>
     </Appshell>
   )
