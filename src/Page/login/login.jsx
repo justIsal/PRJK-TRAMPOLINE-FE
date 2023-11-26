@@ -9,8 +9,8 @@ import Logo from "../../assets/logo4.png"
 import "./login.css"
 const Login = ()=> {
     const [values,setValue] = useState({
-        email:"tsalmani@example.com",
-        password: "12345678"
+        email:"",
+        password: ""
     })
     // const dispatch = useDispatch()
     const navigate = useNavigate();
