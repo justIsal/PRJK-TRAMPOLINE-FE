@@ -49,7 +49,7 @@ const Modals = ({open,handleClose})=> {
             })
             // const waktuBooking = value.tanggalBooking+'T'+value.waktuBooking;
             const formData = {...value,kdTempat: value.kdTempat[0]};
-            const response = await axios.post('https://todoappbe-production.up.railway.app/api/v1/tiket',formData);
+            const response = await axios.post('https://prjkcekapi-production.up.railway.app/api/v1/tiket',formData);
 
             if( response.status==201 ){
                 const pesan = `hallo selamat siang admin saya ${value.nama} dengan tanggal lahir ${value.tanggalLahir} nomer wa ${value.noWa} izin konfirmasi dengan kode pemesanan ${kodeTempat} tanggal: ${value.tanggalBooking} jam: ${value.sesiBooking}`;
