@@ -17,7 +17,7 @@ const Login = ()=> {
     const onHandleSubmit = async(e)=> {
         e.preventDefault();
         try{
-            const req = await axios.post('http://localhost:5174/login',values);
+            const req = await axios.post('https://todoappbe-production.up.railway.app/api/v1/login',values);
             store.dispatch(setToken(req.data.accessToken))
             store.dispatch(setUser(req.data))
             navigate('/admin/home')

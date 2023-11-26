@@ -27,7 +27,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import ModalDate from "../../components/Modals/ModalDate";
-import { startOfWeek, endOfWeek,startOfMonth, endOfMonth, format } from 'date-fns';
+import { startOfWeek, endOfWeek,startOfMonth, endOfMonth, format,eachDayOfInterval } from 'date-fns';
 import CSVDownloadButton from "../../components/Export/CSVDownloadButton";
 import Table from "../../components/table/Table";
 
@@ -121,13 +121,13 @@ const Admin = () => {
   //       // data: [12, 19, 3, 5, 2, 3, 9],
   //       backgroundColor: 'red',
   //     }
+
   //   ],
   // };
   useEffect(()=> {
     const requestApi = async()=>{
       try{
         const req = await axiosJwt.get('/tiket');
-
         setValue(req.data)
         const isVerifiedSucces= req.data.filter(item=>item.isVerified == true)
         const isVerifiedPending = req.data.filter(item=>item.isVerified == false)
@@ -135,16 +135,21 @@ const Admin = () => {
         setTiketPending(isVerifiedPending)
         
         const labels = ['minggu','senin','selasa','rabu','kamis','jumat','sabtu'];
-        const bookingsPerDayInWeek = []
 
         const bookingsForDay = req.data.filter(item=>item.waktuPesan === formattedToday);
 
-        for (let i = startDate.getDate(); i <= endDate.getDate(); i++) {
-          const date = new Date(today.getFullYear(), today.getMonth(), i);
-          // labels.push(format(date, 'yyyy-MM-dd'));
-          const bookingsOnDate = req.data.filter(item => item.waktuPesan === format(date, 'yyyy-MM-dd'));
+        const datesBetween = eachDayOfInterval({ start: startDate, end: endDate });
+
+        // const formattedDates = datesBetween.map(date => format(date, 'yyyy-MM-dd'));
+
+        const bookingsPerDayInWeek = []
+
+        datesBetween && datesBetween.map(item=> {
+          const date = format(item, 'yyyy-MM-dd')
+          const bookingsOnDate = req.data.filter(item => item.waktuPesan === date);
           bookingsPerDayInWeek.push(bookingsOnDate.length)
-        }
+        })
+
         const bookingsForThisWeek = req.data.filter(
           item => {
             const bookingDate = new Date(item.waktuPesan)
@@ -169,7 +174,6 @@ const Admin = () => {
           datasets: [
             {
               label: 'Bookings',
-              // data: bookingsPerDay,
               data: bookingsPerDayInWeek,
               borderColor: 'red',
               backgroundColor: 'rgba(255, 0,0 , 0.1)',
@@ -177,7 +181,6 @@ const Admin = () => {
             },
           ],
         });
-
         setInMonth(bookingsForThisMonth)
         setInWeek(bookingsForThisWeek)
         setInToday(bookingsForDay)

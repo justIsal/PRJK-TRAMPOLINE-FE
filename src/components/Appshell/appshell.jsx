@@ -68,7 +68,7 @@ const Appshell = ({children,data})=> {
           });
         if(confirmResult.isConfirmed){
             try{
-                const req = await axios.delete('http://localhost:5174/logout');
+                const req = await axios.delete('https://todoappbe-production.up.railway.app/api/v1/logout');
                 console.log(req)
                 store.dispatch(clearData())
                 if(req.status) navigate('/admin')

@@ -64,7 +64,7 @@ const ModalEdit = ({open,handleClose,data})=> {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete!"
+            confirmButtonText: "Yes, update!"
           });
           confirmResultPromise.then((result) => {
             if(result.isConfirmed) {
