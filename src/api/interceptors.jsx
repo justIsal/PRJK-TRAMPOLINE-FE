@@ -6,7 +6,7 @@ import { store } from "../redux/store";
 import { jwtDecode } from "jwt-decode";
 
 const axiosJwt = axios.create({
-    baseURL: 'https://todoappbe-production.up.railway.app/api/v1/',
+    baseURL: 'https://prjkcekapi-production.up.railway.app/api/v1/',
     // timeout: 5000,
     // headers: {
     //   Authorization: `Bearer ${store.getState().token.token}`
