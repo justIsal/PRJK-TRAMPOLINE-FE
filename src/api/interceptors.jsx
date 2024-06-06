@@ -6,7 +6,7 @@ import { store } from "../redux/store";
 import { jwtDecode } from "jwt-decode";
 
 const axiosJwt = axios.create({
-    baseURL: 'http://localhost:5174/',
+    baseURL: 'https://prjk-trampoline-4np7fjm3c-tsalmans-projects.vercel.app/',
     // timeout: 5000,
     // headers: {
     //   Authorization: `Bearer ${store.getState().token.token}`
