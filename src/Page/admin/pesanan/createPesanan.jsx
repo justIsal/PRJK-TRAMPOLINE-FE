@@ -49,7 +49,7 @@ const CreatePesanan = ({open,handleClose})=> {
             // const waktuBooking = value.tanggalBooking+'T'+value.waktuBooking;
             const formData = {...value,kdTempat: value.kdTempat[0]};
             console.log(formData);
-            const response = await axios.post('http://localhost:5174/tiket',formData);
+            const response = await axios.post('https://prjk-trampoline-be.vercel.app/tiket',formData);
 
             if( response.status==201 ){
                 setValue({
