@@ -17,7 +17,7 @@ const Login = ()=> {
     const onHandleSubmit = async(e)=> {
         e.preventDefault();
         try{
-            const req = await axios.post('https://prjk-trampoline-4np7fjm3c-tsalmans-projects.vercel.app/login',values);
+            const req = await axios.post('https://prjk-trampoline-be.vercel.app/login',values);
             store.dispatch(setToken(req.data.accessToken))
             store.dispatch(setUser(req.data))
             navigate('/admin/home')
