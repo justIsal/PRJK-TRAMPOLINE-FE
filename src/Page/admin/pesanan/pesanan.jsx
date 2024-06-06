@@ -43,7 +43,7 @@ const Pesanan = () => {
     const reqDataApi = async()=> {
         try{
             const req = await axiosJwt.get('/tiket');
-            const data = req.data.filter((item)=>item.isVerified!==true)
+            const data = req.data.filter((item)=>item.isVerified!==true && item.tipePengguna == 'Reguler')
             setDatas(data || [])
         }catch(err){
             console.log(err)
@@ -234,13 +234,13 @@ const Pesanan = () => {
     return (
     <Appshell data={data.length}>
         <div className="pesanan-container__header">
-            <h3 className="head-title">Dashboard</h3>
+            <h3 className="head-title">Tiket Pesanan</h3>
         </div>
         <div className="table-container__pesanan">
             <CacheProvider value={muiCache}>
                 <ThemeProvider theme={customTheme}>
                 <MUIDataTable
-                    title={"Tiket validate"}
+                    title={"Tiket reguler validate"}
                     data={data}
                     columns={columns}
                     options={options}

@@ -5,7 +5,7 @@ import {  useNavigate } from "react-router-dom"
 import { setToken,setUser} from "../../redux/authSlice"
 import { useDispatch } from "react-redux"
 import { store } from "../../redux/store"
-import Logo from "../../assets/logo4.png"
+import Logo from "../../assets/logo3.png"
 import "./login.css"
 const Login = ()=> {
     const [values,setValue] = useState({
@@ -17,7 +17,7 @@ const Login = ()=> {
     const onHandleSubmit = async(e)=> {
         e.preventDefault();
         try{
-            const req = await axios.post('https://prjkcekapi-production.up.railway.app/api/v1/login',values);
+            const req = await axios.post('http://localhost:5174/login',values);
             store.dispatch(setToken(req.data.accessToken))
             store.dispatch(setUser(req.data))
             navigate('/admin/home')
@@ -28,6 +28,7 @@ const Login = ()=> {
     return(
         <div className="login-container">
             <img src={Logo} alt="" />
+            <div className="blur hero-blur"></div>
             <form className="form" onSubmit={onHandleSubmit}>
                 <label htmlFor="email">Email</label>
                 <input 

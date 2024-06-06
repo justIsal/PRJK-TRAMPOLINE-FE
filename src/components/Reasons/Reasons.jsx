@@ -27,19 +27,19 @@ const Reasons = () => {
         <div className="details-r">
           <div>
             <img src={tick} alt=""></img>
-            <span>LEBIH DARI 140+ EXPERT COACH</span>
+            <span>SUASANA & SENSASI BARU BEROLAHRAGA TRAMPOLIN</span>
           </div>
           <div>
             <img src={tick} alt="" />
-            <span>TRAUB SMARTER AND FASTER TAH BEFORE</span>
+            <span>TEMPAT NYAMAN & MUDAH DIJANGKAU</span>
           </div>
           <div>
             <img src={tick} alt="" />
-            <span>1 FREE PROGRAM FOR NEW MEMBER</span>
+            <span>COACH YANG MENYENANGKAN & BERPENGALAMAN</span>
           </div>
           <div>
             <img src={tick} alt="" />
-            <span>RELIABLE PARTENRS</span>
+            <span>SELALU ADA DOORPRIZE SETIAP HARINYA</span>
           </div>
         </div>
         <span

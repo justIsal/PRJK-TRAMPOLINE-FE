@@ -128,7 +128,8 @@ const Admin = () => {
     const requestApi = async()=>{
       try{
         const req = await axiosJwt.get('/tiket');
-        setValue(req.data)
+        setValue(req.data);
+
         const isVerifiedSucces= req.data.filter(item=>item.isVerified == true)
         const isVerifiedPending = req.data.filter(item=>item.isVerified == false)
         setTiketSucces(isVerifiedSucces.length)
@@ -175,8 +176,8 @@ const Admin = () => {
             {
               label: 'Bookings',
               data: bookingsPerDayInWeek,
-              borderColor: 'red',
-              backgroundColor: 'rgba(255, 0,0 , 0.1)',
+              borderColor: 'rgb(244, 179, 1)',
+              backgroundColor: 'rgb(244, 179, 1, 0.1)',
               borderWidth: 1,
             },
           ],

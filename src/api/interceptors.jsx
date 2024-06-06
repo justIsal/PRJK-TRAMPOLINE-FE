@@ -6,12 +6,13 @@ import { store } from "../redux/store";
 import { jwtDecode } from "jwt-decode";
 
 const axiosJwt = axios.create({
-    baseURL: 'https://prjkcekapi-production.up.railway.app/api/v1/',
+    baseURL: 'http://localhost:5174/',
     // timeout: 5000,
     // headers: {
     //   Authorization: `Bearer ${store.getState().token.token}`
     // }
 });
+// https://prjkcekbe-production.up.railway.app/api/v1/login
 
 axiosJwt.interceptors.request.use(
   async (config) => {

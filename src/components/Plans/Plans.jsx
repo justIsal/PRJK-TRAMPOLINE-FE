@@ -3,6 +3,7 @@ import { plansData } from "../../data/plansData";
 import whiteTick from "../../assets/whiteTick.png";
 import "./Plans.css";
 import Modals from "../Modals/Modals";
+import ModalsMember from "../Modals/ModalsMember";
 
 const Plans = () => {
   const [open, setOpen] = React.useState(false);
@@ -42,7 +43,7 @@ const Plans = () => {
           </div>
         ))}
       </div>
-      <Modals
+      <ModalsMember
         open={open}
         handleClose={handleClose}
       />

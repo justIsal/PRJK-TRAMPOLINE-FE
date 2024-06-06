@@ -10,7 +10,7 @@ const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
   return (
     <div className="header">
-      <img src={logo} alt="" className="logo" />
+      {/* <img src={logo} alt="" className="logo" /> */}
       {menuOpened === false && mobile === true ? (
         <div
           style={{

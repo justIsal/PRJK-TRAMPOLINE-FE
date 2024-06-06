@@ -22,16 +22,16 @@ const Hero = () => {
             whileInView={{ left: "8px" }}
             transition={{ ...transition, type: "tween" }}
           ></motion.div>
-          <span>The best Trampolin Club in the world</span>
+          <span>THE BEST TRAMPOLIN IN THE TOWN</span>
         </div>
         {/* hero heading */}
         <div className="hero-text">
           <div>
-            <span className="stroke-text">Bentuk</span>
-            <span>Tubuh</span>
+            <span className="stroke-text">LETS JUMP</span>
+            <span>AND FUN</span>
           </div>
           <div>
-            <span>Yang Ideal</span>
+            <span>WITH JORDAN</span>
           </div>
           <div>
             <span>Ini adalah percobaan yang sangat susah</span>
@@ -40,12 +40,12 @@ const Hero = () => {
 
         {/* Figures */}
         <div className="figures">
-          <div>
+          {/* <div>
             <span>
               <NumberCounter end={140} start={80} delay="3" preFix="+" />
             </span>
             <span>expert coach</span>
-          </div>
+          </div> */}
           <div>
             <span>
               {" "}
@@ -53,18 +53,18 @@ const Hero = () => {
             </span>
             <span>Member joined</span>
           </div>
-          <div>
+          {/* <div>
             <span>
               {" "}
               <NumberCounter end={50} start={0} delay="3" preFix="+" />
             </span>
             <span>Program</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Herro buttons */}
         <div className="hero-buttons">
-          <buttons className="btn">Get Started</buttons>
+          <buttons className="btn">Ayo Gabung</buttons>
           <buttons className="btn">Learn more</buttons>
         </div>
       </div>
